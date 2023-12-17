@@ -1,11 +1,11 @@
 import React from 'react';
 import Header from '../components/Header';
 
-export default function Panel(): React.ReactElement {
+export default function NotFound(): React.ReactElement {
   return (
     <>
       <Header />
-      <div>Panel</div>
+      NotFound
     </>
   );
 }
