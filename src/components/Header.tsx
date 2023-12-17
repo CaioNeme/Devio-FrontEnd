@@ -38,7 +38,7 @@ export default function Header(): React.ReactElement {
     <Conteiner>
       <Logo>
         <div>
-          <img src="/src/assets/images/hamburguer.png" alt="logo" />
+          <img src="/src/assets/images/hamburguerLogo.png" alt="logo" />
         </div>
         <div>fastfood</div>
       </Logo>

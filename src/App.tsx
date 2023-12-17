@@ -9,6 +9,7 @@ export default function App(): React.ReactElement {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/kitchen" element={<Kitchen />} />
         <Route path="/panel" element={<Panel />} />
