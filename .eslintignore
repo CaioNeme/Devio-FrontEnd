@@ -1,0 +1,17 @@
+node_modules
+dist
+coverage
+requirements
+.vscode
+*.js
+*.json
+README.md
+.env*
+prisma/**/*
+docker-compose*
+Dockerfile*
+nginx.conf
+vite.config.ts
+index.html
+commitlint.config.ts
+hamburguer.png
