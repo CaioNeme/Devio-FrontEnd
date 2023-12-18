@@ -22,7 +22,6 @@ export default function HomePage(): React.ReactElement {
     axios
       .get(`${import.meta.env.VITE_API_URL}/products`)
       .then(res => {
-        console.log(res.data);
         setProducts(res.data as Product[]);
       })
       .catch(error => {
@@ -69,7 +68,10 @@ export default function HomePage(): React.ReactElement {
             {products.map(
               product =>
                 product.productType === 'BURGUER' && (
-                  <Product style={{ backgroundColor: '#f96666' }}>
+                  <Product
+                    key={product.id}
+                    style={{ backgroundColor: '#f96666' }}
+                  >
                     <img src={product.image} alt={product.name} />
                     <div>
                       <h1>{product.name}</h1>
@@ -399,7 +401,7 @@ const Product = styled.div`
   }
 
   @media screen and (max-width: 444px) {
-    width: 250px;
+    flex-direction: column;
   }
 `;
 
