@@ -90,7 +90,7 @@ export default function OrderList(props: Props): React.ReactElement {
           )}
         </List>
       ) : (
-        <p>Carregando...</p>
+        <Loading>Loading...</Loading>
       )}
     </div>
   );
@@ -187,4 +187,22 @@ const ItemList = styled.li`
       border-radius: 5px;
     }
   }
+`;
+
+const Loading = styled.div`
+  width: 100%;
+  height: 70vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 29px;
+  letter-spacing: 0em;
+  text-align: center;
+  font-family: 'Poppins';
+  margin-bottom: 10px;
 `;

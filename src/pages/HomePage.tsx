@@ -1,146 +1,209 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/Header';
+import ProductList from '../components/HomePage/ProductList';
+import Search from '../components/HomePage/Search';
 
 export default function HomePage(): React.ReactElement {
   const [products, setProducts] = useState([]);
+  const [itens, setItens] = useState([]);
+  const [itensIds, setItensIds] = useState([]);
+  const [productsIds, setProductsIds] = useState([]);
+  const navigate = useNavigate();
+  const burguerRef = useRef(null);
+  const drinkRef = useRef(null);
+  const dessertRef = useRef(null);
 
-  type Product = {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    image: string;
-    productType: string;
-    soldTimes: number;
-    createdAt: string;
-    updatedAt: string;
+  type ItensToRequest = {
+    note: string;
+    quantity: number;
+    paidPrice: number;
+    productId: number;
+    extraId: number;
+    name?: string;
   };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  function scrollToRef(ref: React.RefObject<HTMLDivElement>) {
+    if (ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
 
   function fetchProducts() {
     axios
       .get(`${import.meta.env.VITE_API_URL}/products`)
       .then(res => {
-        setProducts(res.data as Product[]);
+        setProducts(res.data);
       })
       .catch(error => {
         console.log(error);
       });
   }
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  function cancelOrder() {
+    setItens([]);
+    setItensIds([]);
+    setProductsIds([]);
+  }
+
+  function finishOrder() {
+    if (itens.length === 0) {
+      alert('Selecione pelo menos um item');
+      return;
+    }
+
+    const itensToRequest: ItensToRequest[] = [];
+
+    for (let i = 0; i < itens.length; i + 1) {
+      itensToRequest.push({
+        note: itens[i].note,
+        quantity: itens[i].quantity,
+        paidPrice: itens[i].paidPrice,
+        productId: itens[i].productId,
+        extraId: itens[i].extraId,
+      });
+    }
+
+    navigate('/payment', { state: { itens: itensToRequest, itensIds } });
+  }
 
   return (
     <>
       <Header />
       {products.length !== 0 ? (
-        <Conteiner>
-          <Search>
-            <h1>Seja bem-vindo!</h1>
-            <input type="text" placeholder="O que você procura?" />
-          </Search>
+        <Container>
+          <Search />
           <Category>
-            <h2>Catgorias</h2>
+            <h2>Categorias</h2>
             <p>Navegue por categoria</p>
           </Category>
           <Categories>
-            <div>
+            {/* eslint-disable */}
+            <div onClick={() => scrollToRef(burguerRef)}>
               <img src="/src/assets/images/lanche.png" alt="Lanches" />
               <p>Lanches</p>
             </div>
-            <div>
+            <div onClick={() => scrollToRef(drinkRef)}>
               <img src="/src/assets/images/bebida.png" alt="Bebidas" />
               <p>Bebidas</p>
             </div>
-            <div>
+            <div onClick={() => scrollToRef(dessertRef)}>
               <img src="/src/assets/images/sobremesa.png" alt="Sobremesas" />
               <p>Sobremesas</p>
             </div>
+            {/* eslint-enable */}
           </Categories>
           <Products>
             <h2>Produtos</h2>
             <p>Selecione um produto para adicionar ao seu pedido</p>
           </Products>
-          <ProductsList>
-            {products.map(
-              product =>
-                product.productType === 'BURGUER' && (
-                  <Product
-                    key={product.id}
-                    style={{ backgroundColor: '#f96666' }}
-                  >
-                    <img src={product.image} alt={product.name} />
-                    <div>
-                      <h1>{product.name}</h1>
-                      <h2>{product.description}</h2>
-                      <p>
-                        R$ {(product.price / 100).toFixed(2).replace('.', ',')}
-                      </p>
-                    </div>
-                  </Product>
-                ),
-            )}
-          </ProductsList>
-          <ProductsList>
-            {products.map(
-              product =>
-                product.productType === 'DRINK' && (
-                  <Product style={{ backgroundColor: '#125c13' }}>
-                    <img src={product.image} alt={product.name} />
-                    <div>
-                      <h1>{product.name}</h1>
-                      <h2>{product.description}</h2>
-                      <p>
-                        R$ {(product.price / 100).toFixed(2).replace('.', ',')}
-                      </p>
-                    </div>
-                  </Product>
-                ),
-            )}
-          </ProductsList>
-          <ProductsList>
-            {products.map(
-              product =>
-                product.productType === 'DESSERT' && (
-                  <Product style={{ backgroundColor: '#ffeb70' }}>
-                    <img src={product.image} alt={product.name} />
-                    <div>
-                      <h1>{product.name}</h1>
-                      <h2>{product.description}</h2>
-                      <p>
-                        R$ {(product.price / 100).toFixed(2).replace('.', ',')}
-                      </p>
-                    </div>
-                  </Product>
-                ),
-            )}
-          </ProductsList>
+          <div ref={burguerRef}>
+            <ProductList
+              itens={itens}
+              setItens={setItens}
+              products={products}
+              itensIds={itensIds}
+              setItensIds={setItensIds}
+              setProductsIds={setProductsIds}
+              productsIds={productsIds}
+              type="BURGUER"
+            />
+          </div>
+          <div ref={drinkRef}>
+            <ProductList
+              itens={itens}
+              setItens={setItens}
+              products={products}
+              itensIds={itensIds}
+              setItensIds={setItensIds}
+              setProductsIds={setProductsIds}
+              productsIds={productsIds}
+              type="DRINK"
+            />
+          </div>
+          <div ref={dessertRef}>
+            <ProductList
+              itens={itens}
+              setItens={setItens}
+              products={products}
+              itensIds={itensIds}
+              setItensIds={setItensIds}
+              setProductsIds={setProductsIds}
+              productsIds={productsIds}
+              type="DESSERT"
+            />
+          </div>
+          {itens.length !== 0 ? (
+            <Resume>
+              {itens.map((item: ItensToRequest) => (
+                <div>
+                  <h1>
+                    {item.quantity}x {item.name}
+                  </h1>
+                  <h1>
+                    R$ {(item.paidPrice / 100).toFixed(2).replace('.', ',')}
+                  </h1>
+                </div>
+              ))}
+              <span>
+                <p>Total do pedido</p>
+                <h1>
+                  R${' '}
+                  {(
+                    itens.reduce((total, item) => total + item.paidPrice, 0) /
+                    100
+                  )
+                    .toFixed(2)
+                    .replace('.', ',')}
+                </h1>
+              </span>
+            </Resume>
+          ) : null}
           <Buttons>
             <button
+              disabled={itens.length === 0}
+              onClick={cancelOrder}
               type="button"
-              style={{ backgroundColor: '#ffffff', color: '#9f9f9f' }}
+              style={
+                itens.length === 0
+                  ? { backgroundColor: '#FFF', color: '#9f9f9f' }
+                  : {
+                      backgroundColor: '#FFF',
+                      color: '#125c13',
+                      border: '1px solid #125c13',
+                    }
+              }
             >
               Cancelar
             </button>
             <button
+              disabled={itens.length === 0}
               type="button"
-              style={{ backgroundColor: '#9f9f9f', color: '#ffffff' }}
+              style={
+                itens.length === 0
+                  ? { backgroundColor: '#9f9f9f', color: '#ffffff' }
+                  : { backgroundColor: '#125c13', color: '#ffffff' }
+              }
+              onClick={finishOrder}
             >
               Finalizar Pedido
             </button>
           </Buttons>
-        </Conteiner>
+        </Container>
       ) : (
-        <>Loading...</>
+        <Loading>Loading...</Loading>
       )}
     </>
   );
 }
 
-const Conteiner = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -148,58 +211,6 @@ const Conteiner = styled.div`
 
   box-sizing: border-box;
   margin: 50px 0 20px 75px;
-
-  @media screen and (max-width: 444px) {
-  }
-`;
-
-const Search = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  box-sizing: border-box;
-
-  h1 {
-    font-size: 24px;
-    font-weight: 700;
-    line-height: 29px;
-    letter-spacing: 0em;
-    text-align: left;
-    font-family: 'Poppins';
-    margin-bottom: 10px;
-  }
-
-  input {
-    width: 300px;
-    height: 40px;
-    background: #f4f4f4;
-    border: 0;
-    border-radius: 8px;
-    padding-left: 10px;
-    margin-bottom: 10px;
-    font-family: 'Poppins';
-    font-size: 14px;
-    font-weight: 400;
-  }
-  input:focus,
-  select:focus {
-    box-shadow: 0 0 0 0;
-    border: 0 none;
-    outline: 0;
-  }
-
-  @media screen and (max-width: 444px) {
-    align-items: center;
-    justify-content: center;
-
-    input {
-      box-sizing: border-box;
-      width: 200px;
-      padding-left: 20px;
-      padding-right: 20px;
-    }
-  }
 `;
 
 const Category = styled.div`
@@ -305,106 +316,6 @@ const Products = styled.div`
   }
 `;
 
-const ProductsList = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  align-items: flex-start;
-  box-sizing: border-box;
-  overflow-x: hidden;
-
-  @media screen and (max-width: 444px) {
-    flex-direction: column;
-  }
-`;
-
-const Product = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  width: 200px;
-  height: 250px;
-  margin-top: 50px;
-  margin-bottom: 20px;
-  margin-right: 20px;
-
-  background-image: url(/src/assets/images/background.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-
-  box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.21);
-
-  border-radius: 8px;
-
-  position: relative;
-
-  img {
-    width: 100px;
-    height: 100px;
-
-    margin-top: 20px;
-    margin-bottom: 20px;
-    z-index: 1;
-    position: absolute;
-    top: 30px;
-  }
-
-  div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    padding-top: 30px;
-
-    position: absolute;
-    bottom: 0;
-
-    width: 100%;
-    height: 55%;
-
-    background-color: #fff;
-    border-radius: 8px;
-
-    h1 {
-      font-size: 16px;
-      font-weight: 600;
-      line-height: 20px;
-      letter-spacing: 0em;
-      text-align: center;
-      font-family: 'Poppins';
-      margin-bottom: 10px;
-    }
-
-    h2 {
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 17px;
-      letter-spacing: 0em;
-      text-align: center;
-      font-family: 'Poppins';
-      margin-bottom: 10px;
-    }
-
-    p {
-      font-size: 16px;
-      font-weight: 600;
-      line-height: 20px;
-      letter-spacing: 0em;
-      text-align: center;
-      font-family: 'Poppins';
-      margin-bottom: 10px;
-    }
-  }
-
-  @media screen and (max-width: 444px) {
-    flex-direction: column;
-  }
-`;
-
 const Buttons = styled.div`
   display: flex;
   flex-direction: row;
@@ -445,6 +356,70 @@ const Buttons = styled.div`
     padding-right: 0;
 
     button {
+      margin-bottom: 20px;
+    }
+  }
+`;
+
+const Loading = styled.div`
+  width: 100%;
+  height: 70vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 29px;
+  letter-spacing: 0em;
+  text-align: center;
+  font-family: 'Poppins';
+  margin-bottom: 10px;
+`;
+
+const Resume = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 45px;
+  margin-top: 20px;
+  width: 90%;
+  height: auto;
+  border: 1px solid #e2e2e2;
+
+  div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 18px;
+      color: #000;
+      margin-left: 20px;
+      margin-right: 20px;
+      margin-top: 20px;
+    }
+  }
+
+  span {
+    font-family: 'Poppins', sans-serif;
+    margin-top: 20px;
+    font-size: 18px;
+    color: #000;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-top: 2px dashed #000;
+    padding-top: 20px;
+
+    h1 {
+      font-weight: bold;
+      font-size: 30px;
+      margin-top: 20px;
       margin-bottom: 20px;
     }
   }
