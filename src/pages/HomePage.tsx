@@ -76,15 +76,15 @@ export default function HomePage(): React.ReactElement {
           <Categories>
             {/* eslint-disable */}
             <div onClick={() => scrollToRef(burguerRef)}>
-              <img src="/src/assets/images/lanche.png" alt="Lanches" />
+              <img src='../../public/lanche.png' alt="Lanches" />
               <p>Lanches</p>
             </div>
             <div onClick={() => scrollToRef(drinkRef)}>
-              <img src="/src/assets/images/bebida.png" alt="Bebidas" />
+              <img src="../../public/bebida.png" alt="Bebidas" />
               <p>Bebidas</p>
             </div>
             <div onClick={() => scrollToRef(dessertRef)}>
-              <img src="/src/assets/images/sobremesa.png" alt="Sobremesas" />
+              <img src="../../public/sobremesa.png" alt="Sobremesas" />
               <p>Sobremesas</p>
             </div>
             {/* eslint-enable */}
