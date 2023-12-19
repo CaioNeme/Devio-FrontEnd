@@ -141,7 +141,7 @@ const Product = styled.div`
   margin-bottom: 20px;
   margin-right: 20px;
 
-  background-image: url(/src/assets/images/background.svg);
+  background-image: url(../../../public/background.svg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
