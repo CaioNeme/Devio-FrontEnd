@@ -1,32 +1,10 @@
 import React, { useContext } from 'react';
 import { OrderContext } from '../../context/OrderContext';
+import { Order, PropsPanelList } from '../../utils/protocols';
 
-type Props = {
-  type: string;
-};
-
-export default function PanelList(props: Props): React.ReactElement {
+export default function PanelList(props: PropsPanelList): React.ReactElement {
   const { orderList } = useContext(OrderContext);
   const { type } = props;
-
-  type Itens = {
-    id: number;
-    note: string;
-    quantity: number;
-    paidPrice: number;
-    status: string;
-    productId: number;
-    productImage: string;
-    productName: string;
-    extraId: number;
-  };
-  type Order = {
-    id: number;
-    clientName: string;
-    orderStatus: string;
-    paymentMethod: string;
-    itens: Itens[];
-  };
 
   return (
     <div>

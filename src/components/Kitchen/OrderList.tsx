@@ -3,12 +3,9 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import notification from '../../assets/aud/audio.mp3';
 import { OrderContext } from '../../context/OrderContext';
+import { PropsOrderList } from '../../utils/protocols';
 
-type Props = {
-  type: string;
-};
-
-export default function OrderList(props: Props): React.ReactElement {
+export default function OrderList(props: PropsOrderList): React.ReactElement {
   const { type } = props;
   const { orderList, fetchOrderList } = useContext(OrderContext);
 

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Header from '../components/Header';
 import ProductList from '../components/HomePage/ProductList';
 import Search from '../components/HomePage/Search';
+import { ItensToRequest } from '../utils/protocols';
 
 export default function HomePage(): React.ReactElement {
   const [products, setProducts] = useState([]);
@@ -15,15 +16,6 @@ export default function HomePage(): React.ReactElement {
   const burguerRef = useRef(null);
   const drinkRef = useRef(null);
   const dessertRef = useRef(null);
-
-  type ItensToRequest = {
-    note: string;
-    quantity: number;
-    paidPrice: number;
-    productId: number;
-    extraId: number;
-    name?: string;
-  };
 
   useEffect(() => {
     fetchProducts();

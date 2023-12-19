@@ -1,29 +1,11 @@
 import axios from 'axios';
 import React, { createContext, useEffect } from 'react';
+import { Order } from '../utils/protocols';
 
 export const OrderContext = createContext(undefined);
 
 export function OrderProvider({ children }) {
   const [orderList, setOrderList] = React.useState([]);
-
-  type Itens = {
-    id: number;
-    note: string;
-    quantity: number;
-    paidPrice: number;
-    status: string;
-    productId: number;
-    productImage: string;
-    productName: string;
-    extraId: number;
-  };
-  type Order = {
-    id: number;
-    clientName: string;
-    orderStatus: string;
-    paymentMethod: string;
-    itens: Itens[];
-  };
 
   function fetchOrderList() {
     axios

@@ -1,44 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { PropsProductList } from '../../utils/protocols';
 import Modal from './Modal';
 import ModalComponent from './ModalComponent';
 
-type Product = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  productType: string;
-  soldTimes: number;
-  createdAt: string;
-  updatedAt: string;
-};
-
-type Item = {
-  id: number;
-  note: string;
-  quantity: number;
-  paidPrice: number;
-  status: string;
-  productId: number;
-  productImage: string;
-  productName: string;
-  extraId: number;
-};
-
-type Props = {
-  type: string;
-  products: Product[];
-  setItens: React.Dispatch<React.SetStateAction<Item[]>>;
-  itens: Item[];
-  itensIds: number[];
-  setProductsIds: React.Dispatch<React.SetStateAction<number[]>>;
-  productsIds: number[];
-  setItensIds: React.Dispatch<React.SetStateAction<number[]>>;
-};
-export default function ProductList(props: Props): React.ReactElement {
+export default function ProductList(
+  props: PropsProductList,
+): React.ReactElement {
   const {
     type,
     products,

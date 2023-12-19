@@ -2,64 +2,11 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { PropsModalComponent } from '../../utils/protocols';
 /* eslint-disable */
-type Product = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  productType: string;
-  soldTimes: number;
-  createdAt: string;
-  updatedAt: string;
-};
 
-// type Item = {
-//   id: number;
-//   note: string;
-//   quantity: number;
-//   paidPrice: number;
-//   status: string;
-//   productId: number;
-//   productImage: string;
-//   productName: string;
-//   extraId: number;
-// }
 
-type Extra = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  productType: string;
-  image: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-type ItensToRequest = {
-  note: string;
-  quantity: number;
-  paidPrice: number;
-  productId: number;
-  extraId: number;
-  name?: string;
-}
-
-type Props = {
-  product: Product
-  setItens: React.Dispatch<React.SetStateAction<ItensToRequest[]>>
-  itens: ItensToRequest[]
-  extras: Extra[]
-  setItensIds: React.Dispatch<React.SetStateAction<number[]>>
-  itensIds: number[]
-  setProductsIds: React.Dispatch<React.SetStateAction<number[]>>
-  productsIds: number[]
-  closeModal: () => void
-}
-
-export default function ModalComponent(props:Props):React.ReactElement {
+export default function ModalComponent(props:PropsModalComponent):React.ReactElement {
   const { product, extras, itens, setItens, itensIds, setItensIds, closeModal, setProductsIds, productsIds } = props
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -179,8 +126,8 @@ export default function ModalComponent(props:Props):React.ReactElement {
           </span>
         </Resume>
         <Buttons>
-          <button style={{ backgroundColor: '#FFF', color: '#125c13', border: '1px solid #125c13' }} onClick={continueBuy}>Continuar adicionando</button>
-          <button style={{ backgroundColor: '#125c13', color: '#ffffff' }} onClick={continueBuy} >Adicionar ao pedido</button>
+          <button type="button" style={{ backgroundColor: '#FFF', color: '#125c13', border: '1px solid #125c13' }} onClick={continueBuy}>Continuar adicionando</button>
+          <button type="button" style={{ backgroundColor: '#125c13', color: '#ffffff' }} onClick={continueBuy} >Adicionar ao pedido</button>
         </Buttons>
     </Container>
   )

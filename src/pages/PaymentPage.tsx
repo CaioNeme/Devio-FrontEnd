@@ -8,6 +8,7 @@ import money from '../assets/images/cash.svg';
 import wallet from '../assets/images/wallet.svg';
 import Header from '../components/Header';
 import { OrderContext } from '../context/OrderContext';
+import { ItemSimple, ItensIds } from '../utils/protocols';
 
 export default function PaymentPage(): React.ReactElement {
   const { state } = useLocation();
@@ -72,10 +73,6 @@ export default function PaymentPage(): React.ReactElement {
       return;
     }
 
-    type ItensIds = {
-      id: number;
-    };
-
     const itens = state.itensIds.map((item: ItensIds) => item.id);
 
     const order = {
@@ -101,12 +98,6 @@ export default function PaymentPage(): React.ReactElement {
     navigate('/home');
   }
 
-  type Item = {
-    id: number;
-    name: string;
-    paidPrice: number;
-    quantity: number;
-  };
   /* eslint-disable */
   return (
     <>
@@ -120,7 +111,7 @@ export default function PaymentPage(): React.ReactElement {
           <Resume ref={ref}>
             <h2>Resumo da compra</h2>
             <div>
-              {state.itens.map((item: Item) => (
+              {state.itens.map((item: ItemSimple) => (
                 <Itens key={item.id}>
                   <p>{item.quantity}x {item.name}</p>
                   <p>R$ {(item.paidPrice/100).toFixed(2).replace('.', ',')} </p>
