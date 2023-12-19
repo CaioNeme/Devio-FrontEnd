@@ -70,7 +70,7 @@ export default function ModalComponent(props:Props):React.ReactElement {
     price: 0
   });
 
-  function addItens() {
+  async function addItens() {
     const newItensIds = {
       quantity: quantity,
       paidPrice: totalPrice,
@@ -97,24 +97,18 @@ export default function ModalComponent(props:Props):React.ReactElement {
     }
     
     axios.post(`${import.meta.env.VITE_API_URL}/item`, newItensIds)
-    .then(res => {
+    .then( async res => {
       setItensIds([...itensIds, res.data])
     })
     .catch(error => {
       console.log(error.response.data)
     })
   }
-  function continueBuy() {
-    setProductsIds([...productsIds, product.id])
-    addItens()
-    closeModal()
-  }
 
-  function finishBuy() {
+  async function continueBuy() {
     setProductsIds([...productsIds, product.id])
-    addItens()
+    await addItens()
     closeModal()
-    navigate('/payment', { state: { itens: itens } })
   }
 
   function handleNotes(event:React.ChangeEvent<HTMLTextAreaElement>) {
@@ -186,7 +180,7 @@ export default function ModalComponent(props:Props):React.ReactElement {
         </Resume>
         <Buttons>
           <button style={{ backgroundColor: '#FFF', color: '#125c13', border: '1px solid #125c13' }} onClick={continueBuy}>Continuar adicionando</button>
-          <button style={{ backgroundColor: '#125c13', color: '#ffffff' }} onClick={finishBuy} >Adicionar ao pedido</button>
+          <button style={{ backgroundColor: '#125c13', color: '#ffffff' }} onClick={continueBuy} >Adicionar ao pedido</button>
         </Buttons>
     </Container>
   )

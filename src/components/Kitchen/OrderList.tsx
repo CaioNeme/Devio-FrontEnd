@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+import notification from '../../assets/aud/audio.mp3';
 import { OrderContext } from '../../context/OrderContext';
 
 type Props = {
@@ -33,8 +34,9 @@ export default function OrderList(props: Props): React.ReactElement {
   function confirmOrder(id: number) {
     axios
       .put(`${import.meta.env.VITE_API_URL}/orders/conclude/${id}`)
-      .then(res => {
-        console.log(res);
+      .then(() => {
+        const audio = new Audio(notification);
+        audio.play();
         fetchOrderList();
       })
       .catch(error => {

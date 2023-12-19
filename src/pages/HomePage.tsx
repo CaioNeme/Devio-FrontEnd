@@ -50,6 +50,8 @@ export default function HomePage(): React.ReactElement {
     setItens([]);
     setItensIds([]);
     setProductsIds([]);
+    setProducts([]);
+    navigate('/home');
   }
 
   function finishOrder() {
@@ -58,19 +60,15 @@ export default function HomePage(): React.ReactElement {
       return;
     }
 
-    const itensToRequest: ItensToRequest[] = [];
-
-    for (let i = 0; i < itens.length; i + 1) {
-      itensToRequest.push({
-        note: itens[i].note,
-        quantity: itens[i].quantity,
-        paidPrice: itens[i].paidPrice,
-        productId: itens[i].productId,
-        extraId: itens[i].extraId,
-      });
-    }
-
-    navigate('/payment', { state: { itens: itensToRequest, itensIds } });
+    const priceTotal = itens.reduce((total, item) => total + item.paidPrice, 0);
+    navigate('/payment', {
+      state: {
+        itens,
+        itensIds,
+        productsIds,
+        priceTotal,
+      },
+    });
   }
 
   return (
@@ -186,7 +184,7 @@ export default function HomePage(): React.ReactElement {
               disabled={itens.length === 0}
               type="button"
               style={
-                itens.length === 0
+                itensIds.length === 0
                   ? { backgroundColor: '#9f9f9f', color: '#ffffff' }
                   : { backgroundColor: '#125c13', color: '#ffffff' }
               }

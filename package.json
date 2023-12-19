@@ -21,6 +21,7 @@
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.21.0",
     "react-thermal-printer": "^0.17.0",
+    "react-to-print": "^2.14.15",
     "socket.io-client": "^4.7.2",
     "styled-components": "^6.1.1",
     "websocket": "^1.0.34"
